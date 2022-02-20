@@ -18,9 +18,11 @@ ws["L5"].w = ws["L5"].w.replace("Marca 1-Activo, 0-Inactivo", "Marca");
 
 var data = xlsx.utils.sheet_to_json(ws);
 
-var removed = data.splice((data.Marca='1'),1)
+var fueraMarca = data.filter( item =>{
+  return item.Marca==='1'
+})
 
-var dataList = data.map(function (record) {
+var dataList = fueraMarca.map(function (record) {
   delete record.CodCompra;
   delete record.Rubro;
   delete record.RubroC;
@@ -28,10 +30,12 @@ var dataList = data.map(function (record) {
   delete record.Stock;
   delete record.Precio;
   delete record.Rev;
-
-   /*  for (o of data)
-    delete o.Marca; */
-    
+  /* record.filter( item =>{
+    return item.Marca==='1'
+  })
+ */
+  delete  record.Marca
+   
 
   record.PrecioCba = parseInt(record.PrecioCba) / 100;
 
@@ -42,22 +46,23 @@ var dataList = data.map(function (record) {
 
 //console.log(cellRef);
 //console.log(ws['B5'].w);
-console.log(dataList);
 
-/* var newWB = xlsx.utils.book_new();
+
+var newWB = xlsx.utils.book_new();
 var newWS = xlsx.utils.json_to_sheet(dataList);
 xlsx.utils.book_append_sheet(newWB, newWS, "lista");
 
 
-var dataPDF = data.map(function (record) {
-  delete record.Item
+var dataPDF = fueraMarca.map(function (record1) {
+  delete record1.Item
 
 
-  return record;
+  return record1;
 });
 
 var newWS1 = xlsx.utils.json_to_sheet(dataPDF);
 xlsx.utils.book_append_sheet(newWB, newWS1, "PDF");
 
-xlsx.writeFile(newWB, "Listas.xls"); 
- */
+xlsx.writeFile(newWB, "Listas.xlsx"); 
+
+//console.log(dataPDF);
