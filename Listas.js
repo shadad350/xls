@@ -14,13 +14,11 @@ ws["J5"].w = ws["J5"].w.replace("Precio Cba.", "PrecioCba");
 ws["K5"].w = ws["K5"].w.replace("Precio Rev.", "Rev");
 ws["L5"].w = ws["L5"].w.replace("Marca 1-Activo, 0-Inactivo", "Marca");
 
-//cellRef = xlsx.utils.encode_range({ s: { c: 4, r: 5 }, e: { c: 4, r: 4999 } });
-
 var data = xlsx.utils.sheet_to_json(ws);
 
-var fueraMarca = data.filter( item =>{
-  return item.Marca==='1'
-})
+var fueraMarca = data.filter((item) => {
+  return item.Marca === "1";
+});
 
 var dataList = fueraMarca.map(function (record) {
   delete record.CodCompra;
@@ -30,39 +28,23 @@ var dataList = fueraMarca.map(function (record) {
   delete record.Stock;
   delete record.Precio;
   delete record.Rev;
-  /* record.filter( item =>{
-    return item.Marca==='1'
-  })
- */
-  delete  record.Marca
-   
+  delete record.Marca;
 
   record.PrecioCba = parseInt(record.PrecioCba) / 100;
 
   return record;
 });
 
-
-
-//console.log(cellRef);
-//console.log(ws['B5'].w);
-
-
 var newWB = xlsx.utils.book_new();
 var newWS = xlsx.utils.json_to_sheet(dataList);
 xlsx.utils.book_append_sheet(newWB, newWS, "lista");
 
-
 var dataPDF = fueraMarca.map(function (record1) {
-  delete record1.Item
-
-
+  delete record1.Item;
   return record1;
 });
 
 var newWS1 = xlsx.utils.json_to_sheet(dataPDF);
 xlsx.utils.book_append_sheet(newWB, newWS1, "PDF");
 
-xlsx.writeFile(newWB, "Listas.xlsx"); 
-
-//console.log(dataPDF);
+xlsx.writeFile(newWB, "Listas.xlsx");
