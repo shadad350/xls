@@ -14,8 +14,6 @@ ws["J5"].w = ws["J5"].w.replace("Precio Cba.", "PrecioCba");
 ws["K5"].w = ws["K5"].w.replace("Precio Rev.", "Rev");
 ws["L5"].w = ws["L5"].w.replace("Marca 1-Activo, 0-Inactivo", "Marca");
 
-//cellRef = xlsx.utils.encode_range({ s: { c: 4, r: 5 }, e: { c: 4, r: 4999 } });
-
 var data = xlsx.utils.sheet_to_json(ws);
 
 var dataCSV = data.map(function (record) {
@@ -39,12 +37,10 @@ var dataCSV = data.map(function (record) {
   return record;
 });
 
-//console.log(cellRef);
-//console.log(ws['B5'].w);
 console.log(dataCSV);
 
-var newWB =xlsx.utils.book_new();
-var newWS= xlsx.utils.json_to_sheet(dataCSV);
-xlsx.utils.book_append_sheet(newWB,newWS,"sheet")
+var newWB = xlsx.utils.book_new();
+var newWS = xlsx.utils.json_to_sheet(dataCSV);
+xlsx.utils.book_append_sheet(newWB, newWS, "sheet");
 
-xlsx.writeFile(newWB,"PasoInfo.csv")
+xlsx.writeFile(newWB, "PasoInfo.csv");
