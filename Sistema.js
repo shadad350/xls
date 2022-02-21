@@ -1,7 +1,6 @@
 var xlsx = require("xlsx");
 
-var wb = xlsx.readFile("180222.XLS");
-
+var wb = xlsx.readFile("210222.XLS");
 var ws = wb.Sheets["Sheet1"];
 
 ws["!ref"] = ws["!ref"].replace("A1", "B5");
@@ -17,33 +16,42 @@ ws["L5"].w = ws["L5"].w.replace("Marca 1-Activo, 0-Inactivo", "Marca");
 var data = xlsx.utils.sheet_to_json(ws);
 
 var dataSistema = data.map(function (record) {
+  delete record.CodCompra;
   delete record.Rubro;
+  delete record.RubroC;
   delete record.Empaque;
+  delete record.PrecioCba;
   delete record.Rev;
 
-  for (o of data) o.RubroC = o.RubroC.split(/BORRAR/).join("");
   for (o of data) o.Marca = o.Marca.replace("1", "Activa");
   for (o of data) o.Marca = o.Marca.replace("0", "Pausada");
   for (o of data)
     if (o.Stock < 0) {
       o.Stock = 0;
     }
-    for (o of data)
+  for (o of data)
     if (o.Stock === 0) {
-      o.Marca.replace = 'Pausada';
+      o.Marca= "Pausada";
     }
 
   record.Stock = parseInt(record.Stock);
   record.Precio = Math.ceil(parseInt(record.Precio) / 100);
   record.Precio5 = record.Precio;
   record.Precio = record.Precio + 69;
+  record.Codigo= toString(record.Codigo)
   return record;
 });
 
-console.log(dataSistema);
+/* var dataSistemaD = dataSistema.map(function (o) {
+  if (o.Stock === 0) {
+    o.Marca= "Pausada";
+  }
+  return o;
+}); */
+
+//console.log(dataSistema);
 
 var newWB = xlsx.utils.book_new();
-var newWS = xlsx.utils.json_to_sheet(dataCSV);
+var newWS = xlsx.utils.json_to_sheet(dataSistema);
 xlsx.utils.book_append_sheet(newWB, newWS, "Sistema");
-
-xlsx.writeFile(newWB, "Sistema.xls);
+xlsx.writeFile(newWB, "Sistema.xls");
