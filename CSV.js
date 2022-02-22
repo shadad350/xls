@@ -37,7 +37,7 @@ var dataCSV = data.map(function (record) {
   return record;
 });
 
-console.log(dataCSV);
+//console.log(dataCSV);
 
 var newWB = xlsx.utils.book_new();
 var newWS = xlsx.utils.json_to_sheet(dataCSV);
